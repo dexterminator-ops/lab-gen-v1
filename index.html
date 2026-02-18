@@ -8,6 +8,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LabRecord Pro | Generator</title>
     <style>
+            @media print { 
+    /* Hide everything we don't want on paper */
+    .no-print, .ad-slot, .btn, script { 
+        display: none !important; 
+    } 
+    /* Ensure the record is visible */
+    #record-output { 
+        display: block !important; 
+        margin: 0;
+        padding: 0;
+    } 
+}
+            #record-output {
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+table {
+    page-break-inside: auto;
+}
+
+tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+}
         :root {
             --bg-color: #f8fafc;
             --card-bg: #ffffff;
