@@ -1,0 +1,257 @@
+<html>
+        <head><title>Downloaded HTML</title></head>
+        <body>
+            <pre style="white-space: pre-wrap; word-wrap: break-word;"><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LabRecord Pro | Generator</title>
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --accent-color: #3b82f6;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f1f5f9;
+            --border-color: #334155;
+        }
+
+        * { box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        .input-group { margin-bottom: 1.5rem; }
+        
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        .btn {
+            cursor: pointer;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .btn-primary { background: var(--accent-color); color: white; width: 100%; }
+        .btn-add { background: var(--success-color); color: white; margin-top: 10px; }
+        .btn-ghost { background: transparent; border: 1px solid var(--border-color); color: var(--text-color); }
+        .btn-danger { background: var(--danger-color); color: white; padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+
+        /* Report View Styling */
+        #report-view { display: none; }
+        
+        .report-header {
+            border-bottom: 2px solid #000;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        @media print {
+            .no-print { display: none !important; }
+            #report-view { display: block !important; }
+            #input-view { display: none !important; }
+            body { background: white; color: black; }
+            .card { border: none; box-shadow: none; }
+        }
+
+        .hidden { display: none; }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .card { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="no-print">
+        <h1>LabRecord <span style="color: var(--accent-color)">Pro</span></h1>
+        <button class="btn btn-ghost" onclick="toggleTheme()" id="theme-btn">🌙 Dark Mode</button>
+    </header>
+
+    <div id="input-view" class="card">
+        <div class="input-group">
+            <label>Student Name</label>
+            <input type="text" id="studentName" placeholder="e.g. Alex Rivera">
+        </div>
+        <div class="input-group">
+            <label>Experiment Title</label>
+            <input type="text" id="expTitle" placeholder="e.g. Hooke's Law Verification">
+        </div>
+        <div class="input-group">
+            <label>Date</label>
+            <input type="date" id="expDate">
+        </div>
+
+        <h3>Readings</h3>
+        <table id="readings-input-table">
+            <thead>
+                <tr>
+                    <th>Observation/Trial</th>
+                    <th>Value</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="readings-body">
+                </tbody>
+        </table>
+        <button class="btn btn-add" onclick="addRow()">+ Add Reading Row</button>
+        
+        <hr style="margin: 2rem 0; border: 0; border-top: 1px solid var(--border-color);">
+        
+        <button class="btn btn-primary" onclick="generateReport()">Generate Lab Report</button>
+    </div>
+
+    <div id="report-view" class="card">
+        <div class="report-header">
+            <h1 id="r-title" style="margin: 0"></h1>
+            <p><strong>Student:</strong> <span id="r-name"></span></p>
+            <p><strong>Date:</strong> <span id="r-date"></span></p>
+        </div>
+
+        <h3>Observation Table</h3>
+        <table id="report-table">
+            <thead>
+                <tr>
+                    <th>Trial No.</th>
+                    <th>Description</th>
+                    <th>Measured Value</th>
+                </tr>
+            </thead>
+            <tbody id="report-body"></tbody>
+        </table>
+
+        <div style="margin-top: 3rem; display: flex; justify-content: space-between;">
+            <p>___________________<br>Student Signature</p>
+            <p>___________________<br>Instructor Approval</p>
+        </div>
+
+        <div class="no-print" style="margin-top: 2rem;">
+            <button class="btn btn-ghost" onclick="editForm()">← Back to Edit</button>
+            <button class="btn btn-primary" style="width: auto; float: right;" onclick="window.print()">Print to PDF</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize with one row
+    window.onload = () => {
+        document.getElementById('expDate').valueAsDate = new Date();
+        addRow();
+    };
+
+    function toggleTheme() {
+        const body = document.body;
+        const btn = document.getElementById('theme-btn');
+        if (body.getAttribute('data-theme') === 'dark') {
+            body.removeAttribute('data-theme');
+            btn.innerText = "🌙 Dark Mode";
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            btn.innerText = "☀️ Light Mode";
+        }
+    }
+
+    function addRow() {
+        const tbody = document.getElementById('readings-body');
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><input type="text" class="obs-desc" placeholder="Trial 1"></td>
+            <td><input type="text" class="obs-val" placeholder="0.00"></td>
+            <td><button class="btn btn-danger" onclick="this.parentElement.parentElement.remove()">Remove</button></td>
+        `;
+        tbody.appendChild(row);
+    }
+
+    function generateReport() {
+        // Map data from inputs to report
+        document.getElementById('r-name').innerText = document.getElementById('studentName').value || "N/A";
+        document.getElementById('r-title').innerText = document.getElementById('expTitle').value || "Untitled Experiment";
+        document.getElementById('r-date').innerText = document.getElementById('expDate').value;
+
+        const reportBody = document.getElementById('report-body');
+        reportBody.innerHTML = '';
+        
+        const descriptions = document.querySelectorAll('.obs-desc');
+        const values = document.querySelectorAll('.obs-val');
+
+        descriptions.forEach((desc, index) => {
+            const row = reportBody.insertRow();
+            row.insertCell(0).innerText = index + 1;
+            row.insertCell(1).innerText = desc.value;
+            row.insertCell(2).innerText = values[index].value;
+        });
+
+        document.getElementById('input-view').style.display = 'none';
+        document.getElementById('report-view').style.display = 'block';
+    }
+
+    function editForm() {
+        document.getElementById('input-view').style.display = 'block';
+        document.getElementById('report-view').style.display = 'none';
+    }
+</script>
+
+</body>
+</html></pre>
+        </body>
+    </html>
